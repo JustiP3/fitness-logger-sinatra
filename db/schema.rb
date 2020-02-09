@@ -20,7 +20,7 @@ ActiveRecord::Schema.define(version: 20200209005811) do
 
   create_table "workouts", force: :cascade do |t|
     t.string  "name"
-    t.string  "type"
+    t.string  "workout_type"
     t.string  "duration"
     t.string  "distance"
     t.string  "pace"
