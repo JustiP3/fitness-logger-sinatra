@@ -36,6 +36,14 @@ class WorkoutsController < ApplicationController
     end
   end
 
+  get '/workouts/:id/update' do
+    erb :'/workouts/update'
+  end
+
+  patch '/workouts/:id/update' do
+
+  end
+
   get '/workouts/:id' do
     @workout = Workout.find_by(:id => params[:id])
     if session[:user_id] && logged_in? && @workout.user_id == session[:user_id]

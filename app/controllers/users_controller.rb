@@ -9,16 +9,16 @@ class UsersController < ApplicationController
   end
 
   get '/users/:id/update' do
-    if params[:id] == session[:user_id]
-      @user = User.find_by(:id => params[:id])
+    if logged_in?
+      @user = current_user
       erb :'/users/update'
     else
       redirect '/logout'
     end
   end
 
-  post '/users/:id/update' do
-    @user = User.find_by(:id => params[:id])
+  patch '/users/:id/update' do
+    @user = current_user
     @user.username = params[:new_username] unless params[:new_username] == ""
     @user.save
     redirect '/users/index'

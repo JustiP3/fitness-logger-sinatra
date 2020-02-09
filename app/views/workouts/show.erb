@@ -1,6 +1,8 @@
 <h1>Hello, <%= current_user.username %></h1>
 <h3><%=@workout.name%>
 <p>Type: <%= @workout.workout_type %></p>
-<p>Duration: <%= @workout.duration %></p>
-<p>Distance: <%= @workout.distance %></p>
+<p>Duration: <%= @workout.duration %> minutes.</p>
+<p>Distance: <%= @workout.distance %> miles.</p>
 <p>Pace: <%= @workout.pace %></p>
+<br>
+<h3><a href="/workouts/<%="#{@workout.id}"%>/update">Edit Activity</a></h3>

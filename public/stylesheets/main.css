@@ -18,7 +18,22 @@
     font-family: Sans-Serif;
     line-height: 18px;
   }
+  .banner {
+    width: 80%
+    float: left;
+    margin: 3px;
+    display: block;
+    border: 2px blue;
+  }
+  .workout {
+    width: 100%
+    margin: 5px;
+    padding: 5px;
+    border: 2px blue;
+    text-align: center;
 
+    display: block;
+  }
   .wrapper {
     background: #fff;
     -moz-box-shadow: 0 0 10px rgba(0,0,0,.3);
