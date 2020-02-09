@@ -70,12 +70,13 @@ class WorkoutsController < ApplicationController
   end
 
   def calculate_pace(params)
-    distance = params[:distance].to_i
-    duration = params[:duration].to_i
+    distance = params[:distance].to_f
+    duration = params[:duration].to_f
+    pace = nil
     if distance == 0 || duration == 0
       pace = "Cannot calculate pace"
     else
-      pace = distance/duration
+      pace = duration/distance
       pace = pace.to_s + " minutes/mile"
     end
     params[:pace] = pace
