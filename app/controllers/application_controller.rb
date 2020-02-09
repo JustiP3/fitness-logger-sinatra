@@ -49,13 +49,17 @@ class ApplicationController < Sinatra::Base
   post '/signup' do
     username = params[:username]
     password = params[:password]
-    if password != "" && username != ""
+    if password != "" && username != "" && !User.find_by(:username => username)
       user = User.new(params)
       user.save
       session[:user_id] = user.id
       redirect '/users/index'
+    elsif User.find_by(:username => username)
+      @error = "That username already exists"
+      erb :signup
     else
-      redirect '/signup'
+      @error = "New accounts require a username and password"
+      erb :signup
     end
   end
 
