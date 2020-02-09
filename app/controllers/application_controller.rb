@@ -43,13 +43,9 @@ class ApplicationController < Sinatra::Base
     password = params[:password]
     if password != "" && username != ""
       user = User.new(params)
-      if user.save
-        session[:user_id] = user.id
-        redirect '/users/index'
-      else
-        @error = "did not save"
-        erb :error
-      end
+      user.save
+      session[:user_id] = user.id
+      redirect '/users/index'
     else
       redirect '/signup'
     end
