@@ -1,6 +1,6 @@
 class WorkoutsController < ApplicationController
   get '/workouts/index' do
-    if session[:user_id] && logged_in?
+    if logged_in?
       @workouts = current_user.workouts
       erb :'/workouts/index'
     else
@@ -9,13 +9,21 @@ class WorkoutsController < ApplicationController
   end
 
   get '/workouts/new' do
-    erb :'/workouts/new'
+    if !logged_in?
+      redirect '/logout'
+    else
+      erb :'/workouts/new'
+    end
   end
 
   post '/workouts/new' do
+    if !logged_in?
+      redirect '/logout'
+    end
     updated_params = validate_workout(params)
     if updated_params
       @workout = Workout.new(updated_params)
+      @workout.user = current_user
       if @workout.save
         erb :'/workouts/show'
       else
@@ -38,10 +46,10 @@ class WorkoutsController < ApplicationController
   end
 
   def validate_workout(params)
-    #1. If no title, add datetime title
-    if params[:title] == ""
+    #1. If no name, add datetime title
+    if params[:name] == ""
       time = Time.new
-      params[:title] = time.strftime("%a-%m-%d-%Y")
+      params[:name] = time.strftime("%a-%m-%d-%Y")
     end
     #2. Validate - a workout needs either duration or distance
     valid = false
