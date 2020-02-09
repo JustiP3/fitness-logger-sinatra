@@ -13,6 +13,14 @@ class ApplicationController < Sinatra::Base
     erb :index
   end
 
+  get '/home' do
+    if logged_in?
+      redirect '/users/index'
+    else
+      redirect '/'
+    end
+  end
+
   get '/login' do
     erb :login
   end
@@ -53,7 +61,11 @@ class ApplicationController < Sinatra::Base
 
   helpers do
     def logged_in?
-      current_user.id == session[:user_id]
+      if session[:user_id] && current_user.id == session[:user_id]
+        true
+      else
+        false
+      end
     end
 
     def current_user

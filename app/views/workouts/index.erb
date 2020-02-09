@@ -1,0 +1,6 @@
+<h1>Hello, <%= current_user.username %></h1>
+<h3>Here are all of your workouts</h3>
+<% @workouts.each do |workout| %>
+  <p>Name: <%= workout.name %></p>
+  <p><a href="/workouts/<%="#{workout.id}"%>">Show Details</a>
+<% end %>
