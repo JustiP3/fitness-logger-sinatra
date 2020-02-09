@@ -55,6 +55,7 @@ class WorkoutsController < ApplicationController
     valid = false
     if (params[:duration] != "") || (params[:distance] != "")
       valid = true
+      params[:pace] = "Cannot calculate pace"
     end
     #3. calculate pace if we have both duration and distance
     if (params[:duration] != "") && (params[:distance] != "")
@@ -69,7 +70,15 @@ class WorkoutsController < ApplicationController
   end
 
   def calculate_pace(params)
-    # will need to parse strings. need to decide on input format
+    distance = params[:distance].to_i
+    duration = params[:duration].to_i
+    if distance == 0 || duration == 0
+      pace = "Cannot calculate pace"
+    else
+      pace = distance/duration
+      pace = pace.to_s + " minutes/mile"
+    end
+    params[:pace] = pace
     params
   end
 end
