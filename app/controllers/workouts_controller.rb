@@ -37,11 +37,24 @@ class WorkoutsController < ApplicationController
   end
 
   get '/workouts/:id/update' do
-    erb :'/workouts/update'
+    @workout = Workout.find_by(:id => params[:id])
+    if logged_in? && @workout.user_id == current_user.id
+      erb :'/workouts/update'
+    else
+      redirect 'logout'
+    end
   end
 
   patch '/workouts/:id/update' do
-
+    @workout = Workout.find_by(:id => params[:id])
+    if logged_in? && @workout.user_id == current_user.id
+      updated_params = validate_workout(params[:workout])
+      @workout.update(updated_params)
+      @workout.save
+      redirect "/workouts/#{@workout.id}"
+    else
+      redirect '/logout'
+    end
   end
 
   get '/workouts/:id' do
