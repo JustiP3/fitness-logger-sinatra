@@ -79,5 +79,14 @@ class ApplicationController < Sinatra::Base
         nil
       end
     end
+
+    def find_workout(workout_id)
+      @workout = Workout.find_by(:id => workout_id)
+      if logged_in? && current_user.id == @workout.user_id
+        @workout
+      else
+        redirect '/logout'
+      end
+    end
   end
 end

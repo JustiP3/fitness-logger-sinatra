@@ -37,8 +37,8 @@ class WorkoutsController < ApplicationController
   end
 
   get '/workouts/:id/update' do
-    @workout = Workout.find_by(:id => params[:id])
-    if logged_in? && @workout.user_id == current_user.id
+    @workout = find_workout(params[:id])
+    if @workout
       erb :'/workouts/update'
     else
       redirect 'logout'
@@ -46,8 +46,8 @@ class WorkoutsController < ApplicationController
   end
 
   patch '/workouts/:id/update' do
-    @workout = Workout.find_by(:id => params[:id])
-    if logged_in? && @workout.user_id == current_user.id
+    @workout = find_workout(params[:id])
+    if @workout
       updated_params = validate_workout(params[:workout])
       @workout.update(updated_params)
       @workout.save
@@ -58,8 +58,8 @@ class WorkoutsController < ApplicationController
   end
 
   delete '/workouts/:id/delete' do
-    @workout = Workout.find_by(:id => params[:id])
-    if logged_in? && current_user.id == @workout.user_id
+    @workout = find_workout(params[:id])
+    if @workout
       @workout.delete
       redirect '/workouts/index'
     else
@@ -68,8 +68,8 @@ class WorkoutsController < ApplicationController
   end
 
   get '/workouts/:id' do
-    @workout = Workout.find_by(:id => params[:id])
-    if session[:user_id] && logged_in? && @workout.user_id == session[:user_id]
+    @workout = find_workout(params[:id])
+    if @workout
       erb :'/workouts/show'
     else
       redirect '/logout'
