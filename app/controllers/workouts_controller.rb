@@ -31,7 +31,7 @@ class WorkoutsController < ApplicationController
         erb :'/workouts/new'
       end
     else
-      @error = "A workout needs a type and either a duration or distance or both"
+      @error = "A workout needs BOTH a valid type AND either a duration, distance, or both distance and duration"
       erb :'/workouts/new'
     end
   end
@@ -82,15 +82,46 @@ class WorkoutsController < ApplicationController
       time = Time.new
       params[:name] = time.strftime("%a-%m-%d-%Y")
     end
-    #2. Validate - a workout needs a type and either duration or distance
+    #2. Validate - a workout needs a type and either duration or distance and a valid workout type
     valid = false
-    if params[:workout_type] != "" && ((params[:duration] != "") || (params[:distance] != ""))
+    valid_workout_type = false
+    valid_duration_or_distance = false
+
+    params[:workout_type] = params[:workout_type].downcase
+    case params[:workout_type]
+    when "run"
+      params[:workout_type] = "Run"
+      valid_workout_type = true
+    when "walk"
+      params[:workout_type] = "Walk"
+      valid_workout_type = true
+    when "bike"
+      params[:workout_type] = "Bike"
+      valid_workout_type = true
+    when "swim"
+      params[:workout_type] = "Swim"
+      valid_workout_type = true
+    when "hike"
+      params[:workout_type] = "Hike"
+      valid_workout_type = true
+    else
+      valid_workout_type = false
+    end
+
+    if (params[:duration] != "") || (params[:distance] != "")
+      valid_duration_or_distance = true
+    end
+
+    if valid_workout_type && valid_duration_or_distance
       valid = true
       params[:pace] = "Cannot calculate pace"
     end
-    #3. calculate pace if we have both duration and distance
+    #3. calculate pace if we have both duration and distance. Also strip any text charachters from distance and duration.
     if (params[:duration] != "") && (params[:distance] != "")
       params = calculate_pace(params)
+    else
+      params[:distance] = params[:distance].to_f.to_s
+      params[:duration] = params[:duration].to_f.to_s
     end
     #4 return updated params if valid or nil
     if valid
@@ -103,6 +134,8 @@ class WorkoutsController < ApplicationController
   def calculate_pace(params)
     distance = params[:distance].to_f
     duration = params[:duration].to_f
+    params[:distance] = distance.to_s
+    params[:duration] = duration.to_s
     pace = nil
     if distance == 0 || duration == 0
       pace = "Cannot calculate pace"
