@@ -6,3 +6,8 @@
 <p>Pace: <%= @workout.pace %></p>
 <br>
 <h3><a href="/workouts/<%="#{@workout.id}"%>/update">Edit Activity</a></h3>
+<form action="/workouts/<%="#{@workout.id}"%>/delete" method='POST'>  
+  <input type='hidden' name="_method" value="DELETE">
+  <h3>Delete Activity</h3>
+  <input type='submit' value='Delete'>
+</form>

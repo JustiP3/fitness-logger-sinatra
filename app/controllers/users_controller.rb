@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   get '/users/index' do
-    if session[:user_id] && logged_in?
+    if logged_in?
       @user = User.find_by(:id => session[:user_id])
       erb :'/users/index'
     else

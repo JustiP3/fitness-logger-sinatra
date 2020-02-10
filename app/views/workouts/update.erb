@@ -6,5 +6,11 @@
   <p>Change Workout Type: <input type='text' name='workout[workout_type]'  value="<%="#{@workout.workout_type}"%>"></p>
   <p>Distance: <input type='text' name='workout[distance]'  value="<%="#{@workout.distance}"%>"></p>
   <p>Duration: <input type='text' name='workout[duration]'  value="<%="#{@workout.duration}"%>"></p>
-  <input type='submit'>
+  <input type='submit' value="Update">
+</form>
+<br>
+<form action="/workouts/<%="#{@workout.id}"%>/delete" method='POST'>
+  <input type='hidden' name="_method" value="DELETE">
+  <h3>Delete Activity</h3>
+  <input type='submit' value='Delete'>
 </form>

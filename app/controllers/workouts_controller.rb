@@ -57,6 +57,16 @@ class WorkoutsController < ApplicationController
     end
   end
 
+  delete '/workouts/:id/delete' do
+    @workout = Workout.find_by(:id => params[:id])
+    if logged_in? && current_user.id == @workout.user_id
+      @workout.delete
+      redirect '/workouts/index'
+    else
+      redirect '/logout'
+    end
+  end
+
   get '/workouts/:id' do
     @workout = Workout.find_by(:id => params[:id])
     if session[:user_id] && logged_in? && @workout.user_id == session[:user_id]
