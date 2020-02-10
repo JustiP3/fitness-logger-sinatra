@@ -24,4 +24,13 @@ class UsersController < ApplicationController
     redirect '/users/index'
   end
 
+  delete '/users/:id/delete' do
+    if logged_in?
+      @user = current_user
+      @user.delete
+      redirect '/logout'
+    else
+      redirect '/logout'
+    end
+  end
 end

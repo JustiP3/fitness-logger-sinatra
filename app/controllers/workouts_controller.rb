@@ -82,9 +82,9 @@ class WorkoutsController < ApplicationController
       time = Time.new
       params[:name] = time.strftime("%a-%m-%d-%Y")
     end
-    #2. Validate - a workout needs either duration or distance
+    #2. Validate - a workout needs a type and either duration or distance
     valid = false
-    if (params[:duration] != "") || (params[:distance] != "")
+    if params[:workout_type] != "" && ((params[:duration] != "") || (params[:distance] != ""))
       valid = true
       params[:pace] = "Cannot calculate pace"
     end
