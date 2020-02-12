@@ -1,6 +1,50 @@
 class UsersController < ApplicationController
+
+
+    get '/login' do
+      erb :login
+    end
+
+    get '/signup' do
+      erb :signup
+    end
+
+    get '/logout' do
+      session.clear
+      redirect '/'
+    end
+
+    post '/login' do
+      username = params[:username]
+      password = params[:password]
+      user = User.find_by(:username => username)
+      if user && user.authenticate(password)
+        session[:user_id] = user.id
+        redirect '/users/index'
+      else
+        redirect '/login'
+      end
+    end
+
+    post '/signup' do
+      username = params[:username]
+      password = params[:password]
+      if password != "" && username != "" && !User.find_by(:username => username)
+        user = User.new(params)
+        user.save
+        session[:user_id] = user.id
+        redirect '/users/index'
+      elsif User.find_by(:username => username)
+        @error = "That username already exists"
+        erb :signup
+      else
+        @error = "New accounts require a username and password"
+        erb :signup
+      end
+    end
+
   get '/users/index' do
-    if logged_in?
+    if logged_in? && session[:user_id] == current_user.id
       @user = User.find_by(:id => session[:user_id])
       erb :'/users/index'
     else
@@ -9,7 +53,7 @@ class UsersController < ApplicationController
   end
 
   get '/users/:id/update' do
-    if logged_in?
+    if logged_in? && session[:user_id] == current_user.id
       @user = current_user
       erb :'/users/update'
     else
@@ -18,14 +62,19 @@ class UsersController < ApplicationController
   end
 
   patch '/users/:id/update' do
-    @user = current_user
-    @user.username = params[:new_username] unless params[:new_username] == ""
-    @user.save
-    redirect '/users/index'
+
+    if logged_in? && session[:user_id] == params[:id]
+      @user = current_user
+      @user.username = params[:new_username] unless params[:new_username] == ""
+      @user.save
+      redirect '/users/index'
+  else
+    redirect 'logout'
+  end
   end
 
   delete '/users/:id/delete' do
-    if logged_in?
+    if logged_in? && session[:user_id] == params[:id]
       @user = current_user
       @user.delete
       redirect '/logout'
