@@ -2,11 +2,11 @@ class UsersController < ApplicationController
 
 
     get '/login' do
-      erb :login
+      erb :'/users/login'
     end
 
     get '/signup' do
-      erb :signup
+      erb :'/users/signup'
     end
 
     get '/logout' do
@@ -20,7 +20,7 @@ class UsersController < ApplicationController
       user = User.find_by(:username => username)
       if user && user.authenticate(password)
         session[:user_id] = user.id
-        redirect '/users/index'
+        redirect '/users/'
       else
         redirect '/login'
       end
@@ -33,7 +33,7 @@ class UsersController < ApplicationController
         user = User.new(params)
         user.save
         session[:user_id] = user.id
-        redirect '/users/index'
+        redirect '/users'
       elsif User.find_by(:username => username)
         @error = "That username already exists"
         erb :signup
@@ -43,8 +43,8 @@ class UsersController < ApplicationController
       end
     end
 
-  get '/users/index' do
-    if logged_in? && session[:user_id] == current_user.id
+  get '/users' do
+    if logged_in?
       @user = User.find_by(:id => session[:user_id])
       erb :'/users/index'
     else
@@ -53,7 +53,7 @@ class UsersController < ApplicationController
   end
 
   get '/users/:id/update' do
-    if logged_in? && session[:user_id] == current_user.id
+    if validate_current_user(params)
       @user = current_user
       erb :'/users/update'
     else
@@ -62,19 +62,18 @@ class UsersController < ApplicationController
   end
 
   patch '/users/:id/update' do
-
-    if logged_in? && session[:user_id] == params[:id]
+    if validate_current_user(params)
       @user = current_user
       @user.username = params[:new_username] unless params[:new_username] == ""
       @user.save
-      redirect '/users/index'
-  else
-    redirect 'logout'
-  end
+      redirect '/users'
+    else
+      redirect 'logout'
+    end
   end
 
   delete '/users/:id/delete' do
-    if logged_in? && session[:user_id] == params[:id]
+    if validate_current_user(params)
       @user = current_user
       @user.delete
       redirect '/logout'

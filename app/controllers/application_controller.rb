@@ -15,7 +15,7 @@ class ApplicationController < Sinatra::Base
 
   get '/home' do
     if logged_in?
-      redirect '/users/index'
+      redirect '/users/'
     else
       redirect '/'
     end
@@ -23,6 +23,15 @@ class ApplicationController < Sinatra::Base
 
 
   helpers do
+
+    def validate_current_user(params)
+      if logged_in? && params[:id] == current_user.id
+        true
+      else
+        nil
+      end
+    end
+
     def logged_in?
       if session[:user_id] && current_user.id == session[:user_id]
         true
