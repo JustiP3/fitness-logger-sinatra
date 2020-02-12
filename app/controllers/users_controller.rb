@@ -53,7 +53,7 @@ class UsersController < ApplicationController
   end
 
   get '/users/:id/update' do
-    if validate_current_user(params)
+    if logged_in?
       @user = current_user
       erb :'/users/update'
     else

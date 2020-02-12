@@ -1,13 +1,13 @@
 <h1>Change Username</h1>
 <p>Old Username: <%= @user.username %></p>
-<form action="/users/<%="@user.id"%>/update" method='POST'>
+<form action="/users/<%="#{@user.id}"%>/update" method='POST'>
   <input type='hidden' name='_method' value='PATCH'>
   <p>New Username: <input type='text' name='new_username'></p>
   <input type='submit'>
 </form>
 <br>
 <h3>Delete Account</h3>
-<form action="/users/<%="@user.id"%>/delete" method='POST'>
+<form action="/users/<%="#{@user.id}"%>/delete" method='POST'>
   <input type='hidden' name='_method' value='DELETE'>
   <input type='submit' value='Delete'>
 </form>
