@@ -15,7 +15,7 @@ class ApplicationController < Sinatra::Base
 
   get '/home' do
     if logged_in?
-      redirect '/users/'
+      redirect '/users'
     else
       redirect '/'
     end
@@ -54,6 +54,14 @@ class ApplicationController < Sinatra::Base
         @workout
       else
         redirect '/logout'
+      end
+    end
+
+    def validate_workout_user(workout)
+      if logged_in? && current_user.id == workout.user_id
+        true
+      else
+        nil
       end
     end
   end
