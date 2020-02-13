@@ -25,7 +25,7 @@ class ApplicationController < Sinatra::Base
   helpers do
 
     def validate_current_user(params)
-      if logged_in? && params[:id] == current_user.id
+      if logged_in? && params[:id] == current_user.id.to_s
         true
       else
         nil
@@ -50,7 +50,7 @@ class ApplicationController < Sinatra::Base
 
     def find_workout(workout_id)
       @workout = Workout.find_by(:id => workout_id)
-      if logged_in? && current_user.id == @workout.user_id
+      if @workout && logged_in? && current_user.id == @workout.user_id
         @workout
       else
         redirect '/logout'

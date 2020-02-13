@@ -62,7 +62,7 @@ class WorkoutsController < ApplicationController
     @workout = find_workout(params[:id])
     if validate_workout_user(@workout)
       @workout.delete
-      redirect '/workouts/index'
+      redirect '/workouts'
     else
       redirect '/logout'
     end
