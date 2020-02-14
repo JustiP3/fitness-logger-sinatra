@@ -36,7 +36,7 @@ class UsersController < ApplicationController
         redirect '/users'
       elsif User.find_by(:username => username)
         @error = "That username already exists"
-        erb :signup
+        erb :'/users/signup'
       else
         @error = "New accounts require a username and password"
         erb :signup
@@ -63,10 +63,16 @@ class UsersController < ApplicationController
 
   patch '/users/:id/update' do
     if validate_current_user(params)
-      @user = current_user
-      @user.username = params[:new_username] unless params[:new_username] == ""
-      @user.save
-      redirect '/users'
+      if !!User.find_by(:username => params[:new_username])
+        @user = current_user
+        @error = "That username already exists"
+        erb :"/users/update"
+      else
+        @user = current_user
+        @user.username = params[:new_username] unless params[:new_username] == ""
+        @user.save
+        redirect '/users'
+      end
     else
       redirect 'logout'
     end
